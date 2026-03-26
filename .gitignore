@@ -1,2 +1,3 @@
 /venv
 *.pyc
+yatube_api/api/__pycache__/admin.cpython-310.pyc
