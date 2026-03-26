@@ -1,11 +1,12 @@
 from rest_framework import viewsets, permissions, filters
 from rest_framework.generics import get_object_or_404
 from posts.models import Post, Group
-from api.serializers import PostSerializer,\
+from api.serializers import PostSerializer, \
     GroupSerializer, CommentSerializer, FollowSerializer
 from api.permissions import IsAuthorOrReadOnly
 from rest_framework import serializers
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.response import Response
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -13,6 +14,22 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = (IsAuthorOrReadOnly,)
     pagination_class = LimitOffsetPagination
+
+    def list(self, request, *args, **kwargs):
+        limit = request.query_params.get('limit')
+        offset = request.query_params.get('offset')
+
+        queryset = self.filter_queryset(self.get_queryset())
+
+        if limit is not None or offset is not None:
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+        # Иначе возвращаем просто список без пагинации
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
