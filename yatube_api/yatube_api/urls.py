@@ -19,6 +19,5 @@ urlpatterns = [
 
     # Если используете redoc
     path('redoc/', TemplateView.as_view(template_name=
-                                        'redoc.html'),
-         name='redoc'),
+                                        'redoc.html'),name='redoc'),
 ]

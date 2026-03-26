@@ -1,7 +1,8 @@
 from rest_framework import viewsets, permissions, filters
 from rest_framework.generics import get_object_or_404
-from posts.models import Post, Group, Comment, Follow, User
-from api.serializers import PostSerializer, GroupSerializer, CommentSerializer, FollowSerializer
+from posts.models import Post, Group
+from api.serializers import PostSerializer,\
+    GroupSerializer, CommentSerializer, FollowSerializer
 from api.permissions import IsAuthorOrReadOnly
 from rest_framework import serializers
 
